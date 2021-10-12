@@ -1,0 +1,95 @@
+﻿@model WebApplication2.Models.Entity6.Course
+@{
+    ViewBag.Title = "CreateCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    //turn separated string into an int list.
+    List<int> selectTIds = new List<int>();
+    if (TempData["trainerIds"] != null)
+    {
+        selectTIds = TempData["trainerIds"].ToString().Split(',')
+                .Select(id => Int32.Parse(id))
+                .ToList();
+    }
+
+    //check all previously-checked box.
+
+}
+@{
+    //turn separated string into an int list.
+    List<int> selectSIds = new List<int>();
+    if (TempData["traineeIds"] != null)
+    {
+        selectSIds = TempData["traineeIds"].ToString().Split(',')
+                .Select(id => Int32.Parse(id))
+                .ToList();
+    }
+
+    //check all previously-checked box.
+
+}
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="row mt-2">
+      
+        <div class="col-8">
+            <form>
+                <h2>Add Course</h2>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                <div class="form-group">
+
+                    @Html.LabelFor(m => m.Descrpitipon, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Descrpitipon, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold mr-3">Trainer</label>
+                    @foreach (var f in ViewBag.Trainer)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Id" name="trainerIds[]"
+                                   @(selectTIds.Contains(f.Id) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="@f.Name">
+                                @f.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <b>Categories</b>
+                    @Html.DropDownListFor(m => m.CatId,
+                             (IEnumerable<SelectListItem>)ViewBag.Categories,
+                             htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold mr-3">Trainee</label>
+
+                    <input type="text" id="chkfilterl" class="form-control">
+                    @foreach (var f in ViewBag.Trainee)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input input-box" type="checkbox" value="@f.Id" id="traineeIds @f.Id" name="traineeIds[]"
+                                   @(selectSIds.Contains(f.Id) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="@f.Name">
+                                @f.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary mb-2">ADD</button>
+
+            </form>
+        </div>
+    </div>
+
+}
+
